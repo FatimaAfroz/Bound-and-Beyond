@@ -17,14 +17,21 @@
     <input type="text" id="title" placeholder="Book Title">
     <input type="text" id="author" placeholder="Author">
 
+    <!-- 🔥 ADD THESE BACK -->
+    <input type="text" id="series" placeholder="Series Name (optional)">
+    <input type="number" id="seriesNumber" placeholder="Book Number in Series (optional)">
+
     <label>Rating:</label>
     <div class="stars">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-</div>
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+    </div>
+
+    <button onclick="addBook()">Save Book</button>
+</section>
 
     <button onclick="addBook()">Save Book</button>
 </section>
