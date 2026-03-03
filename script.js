@@ -3,21 +3,36 @@ let currentRating = 0;
 let editIndex = null;
 
 /* ===============================
-   DISPLAY BOOKS (index.html)
+   DISPLAY BOOKS
 ================================= */
 function displayBooks() {
     const bookList = document.getElementById("bookList");
-    if (!bookList) return; // Only runs on index page
+    if (!bookList) return;
 
     bookList.innerHTML = "";
+
+    const countElement = document.getElementById("bookCount");
+    if (countElement) {
+        countElement.textContent = `Total Books: ${books.length}`;
+    }
 
     books.forEach((book, index) => {
 
         const rating = Number(book.rating) || 0;
-        let stars = "";
 
+        let stars = "";
         for (let i = 1; i <= 5; i++) {
             stars += i <= rating ? "★" : "☆";
+        }
+
+        let seriesInfo = "";
+        if (book.series && book.series.trim() !== "") {
+            seriesInfo = `
+                <div class="series-badge">
+                    ${book.series} 
+                    ${book.seriesNumber ? `- Book ${book.seriesNumber}` : ""}
+                </div>
+            `;
         }
 
         const div = document.createElement("div");
@@ -26,7 +41,8 @@ function displayBooks() {
         div.innerHTML = `
             <h3>${book.title}</h3>
             <p>${book.author}</p>
-            <p style="color:#c7a96b; font-size:18px;">${stars}</p>
+            ${seriesInfo}
+            <div class="stars-display">${stars}</div>
             <button onclick="editBook(${index})">Edit</button>
             <button onclick="deleteBook(${index})">Delete</button>
         `;
@@ -36,26 +52,25 @@ function displayBooks() {
 }
 
 /* ===============================
-   ADD OR UPDATE BOOK
+   ADD BOOK
 ================================= */
 function addBook() {
 
-    const titleInput = document.getElementById("title");
-    const authorInput = document.getElementById("author");
-
-    if (!titleInput || !authorInput) return;
-
-    const title = titleInput.value.trim();
-    const author = authorInput.value.trim();
+    const title = document.getElementById("title")?.value.trim();
+    const author = document.getElementById("author")?.value.trim();
+    const series = document.getElementById("series")?.value.trim() || "";
+    const seriesNumber = document.getElementById("seriesNumber")?.value || "";
 
     if (!title || !author) {
-        alert("Please enter both title and author.");
+        alert("Please enter title and author.");
         return;
     }
 
     const book = {
-        title: title,
-        author: author,
+        title,
+        author,
+        series,
+        seriesNumber,
         rating: currentRating
     };
 
@@ -67,12 +82,11 @@ function addBook() {
     }
 
     localStorage.setItem("books", JSON.stringify(books));
-
     window.location.href = "index.html";
 }
 
 /* ===============================
-   DELETE BOOK
+   DELETE
 ================================= */
 function deleteBook(index) {
     books.splice(index, 1);
@@ -81,15 +95,15 @@ function deleteBook(index) {
 }
 
 /* ===============================
-   EDIT BOOK
+   EDIT
 ================================= */
 function editBook(index) {
-    localStorage.setItem("editBookIndex", index);
+    localStorage.setItem("editIndex", index);
     window.location.href = "add.html";
 }
 
 /* ===============================
-   PAGE LOAD LOGIC
+   PAGE LOAD
 ================================= */
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -97,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const stars = document.querySelectorAll(".stars span");
 
-    // Star click logic (only works on add.html)
     if (stars.length > 0) {
 
         stars.forEach(star => {
@@ -112,16 +125,16 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        // Load book for editing
-        const editIndexStored = localStorage.getItem("editBookIndex");
+        const storedIndex = localStorage.getItem("editIndex");
 
-        if (editIndexStored !== null) {
-
-            editIndex = Number(editIndexStored);
+        if (storedIndex !== null) {
+            editIndex = Number(storedIndex);
             const book = books[editIndex];
 
             document.getElementById("title").value = book.title;
             document.getElementById("author").value = book.author;
+            document.getElementById("series").value = book.series || "";
+            document.getElementById("seriesNumber").value = book.seriesNumber || "";
 
             currentRating = Number(book.rating) || 0;
 
@@ -130,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 s.style.color = value <= currentRating ? "#c7a96b" : "#555";
             });
 
-            localStorage.removeItem("editBookIndex");
+            localStorage.removeItem("editIndex");
         }
     }
 });
