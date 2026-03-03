@@ -45,7 +45,7 @@ h1 {
 /* HERO */
 .hero {
     text-align: center;
-    padding: 120px 20px 80px;
+    padding: 60px 20px 40px;  /* reduced from 120px */
 }
 
 .hero::before {
@@ -76,7 +76,7 @@ h1 {
 
 /* LIBRARY */
 .library {
-    padding: 40px 60px;
+    padding: 20px 60px;
 }
 
 .library h2 {
@@ -209,4 +209,48 @@ footer {
     background: #1a0f0f;
     color: #c7a96b;
     font-size: 14px;
+}
+
+body {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.book {
+    background: #2a1b1b;
+    padding: 20px;
+    border-radius: 12px;
+    width: 240px;
+    border: 1px solid #5c4328;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    transition: 0.3s;
+}
+
+.book:hover {
+    transform: translateY(-6px);
+}
+
+.series-badge {
+    display: inline-block;
+    background: #5c4328;
+    color: #e8d8b5;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin: 6px 0;
+}
+
+.stars-display {
+    color: #c7a96b;
+    font-size: 18px;
+    margin: 8px 0;
 }
